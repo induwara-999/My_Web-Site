@@ -6,6 +6,10 @@
     <title>Home | Your Website</title>
     
     <style>
+        /* ======================================= */
+        /* CSS විලාසයන් මෙතැනින් ආරම්භ වේ */
+        /* ======================================= */
+        
         /* Login බොත්තම කොළ පාට කිරීමට අවශ්‍ය CSS */
         .btn-signin {
             background-color: #5cb85c;
@@ -19,6 +23,24 @@
 
         .btn-signin:hover {
             background-color: #4cae4c;
+        }
+
+        /* නව Logout බොත්තම රතු පාට කිරීමට */
+        .btn-logout {
+            background-color: #dc3545; /* Red Color */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            display: none; 
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
         }
 
         /* Verification Form Styling */
@@ -61,24 +83,30 @@
         }
 
         /* Blink Animation */
-        /* වේගය 2s දක්වා අඩු කර ඇත */
         @keyframes blink-animation {
             0% { opacity: 0.2; }
             50% { opacity: 1; }
             100% { opacity: 0.2; }
         }
-        
+
         /* Green Active Dot Styling (Hidden by default) */
         .active-indicator {
             height: 10px;
             width: 10px;
-            background-color: #28a745; 
+            background-color: #28a745; /* Default Green */
             border-radius: 50%;
             display: none; 
             margin-left: 10px;
             align-self: center;
+            transition: background-color 0.3s; 
         }
         
+        /* Logout වූ විට Dot එක රතු පැහැයට හැරවීමට */
+        .logged-out-indicator {
+            background-color: #dc3545 !important; /* Red Color */
+            animation: none !important; /* Blinking නවත්වයි */
+        }
+
         .blinking {
             animation: blink-animation 2s infinite alternate; 
         }
@@ -92,6 +120,13 @@
             background-color: #333;
             color: white;
         }
+
+        /* Navbar හි දකුණු පැත්තේ elements (Dot සහ Logout Button) එකට තබා ගැනීමට */
+        .navbar-status {
+            display: flex;
+            align-items: center;
+        }
+
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -120,6 +155,9 @@
             bottom: 0;
             width: 100%;
         }
+        /* ======================================= */
+        /* CSS විලාසයන් මෙතැනින් අවසන් වේ */
+        /* ======================================= */
     </style>
 </head>
 <body>
@@ -133,7 +171,11 @@
             <a href="password_policy.html">Password Policy</a>
             <a href="contact.html">Contact Us</a>
         </div>
-        <div id="active-dot" class="active-indicator" title="Account Active"></div> 
+        
+        <div class="navbar-status">
+            <div id="active-dot" class="active-indicator" title="Account Active"></div> 
+            <button id="logout-button" class="btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
     </nav>
 
     <div class="home-hero">
@@ -150,6 +192,8 @@
             <button onclick="verifyEmail()">Verify</button>
             <div id="verification-message"></div>
         </div>
+        
+        <div id="success-message" style="display: none; color: green; font-size: 1.2em; font-weight: bold; margin-top: 15px;"></div>
 
         <p class="low-level-text">Created by INDUWARA</p>
     </div>
@@ -166,47 +210,80 @@
     <script>
         // අපේක්ෂිත නිවැරදි Email ලිපිනය
         const CORRECT_EMAIL = "b2kdiamondstore@gmail.com";
+        // WhatsApp අංකය සහ පණිවිඩය
+        const WA_NUMBER = "94773608163"; 
+        const WA_MESSAGE = encodeURIComponent("Account Activation Successful✅✅"); // URL Encoding
 
         // Login බොත්තම ක්ලික් කළ විට
         function handleLoginClick(event) {
             event.preventDefault(); 
             
-            // State එක Save කිරීම: "Login Button එක Click කළා"
             localStorage.setItem('login_clicked', 'true');
             
-            // අර site එකට redirect කිරීම
             window.location.href = "https://tharustore.com"; 
+        }
+
+        // Logout Button ක්ලික් කළ විට
+        function handleLogout() {
+            const activeDot = document.getElementById('active-dot');
+            const logoutButton = document.getElementById('logout-button');
+            
+            // 1. Blinking නවතා Dot එක රතු පැහැයට හැරවීම (වහාම)
+            activeDot.classList.remove('blinking');
+            activeDot.classList.add('logged-out-indicator'); 
+            activeDot.title = "Account Logged Out"; 
+            logoutButton.style.display = 'none'; 
+
+            // 2. තත්පර 0.2 කට පසු පිටුව නැවත Load කිරීම (Reset to initial state / Login page)
+            setTimeout(() => {
+                localStorage.removeItem('login_clicked');
+                localStorage.removeItem('verification_complete');
+                
+                window.location.reload(); 
+            }, 200); 
         }
 
         // Verification Logic
         function verifyEmail() {
-            // අවශ්‍ය සියලුම HTML Elements ලබා ගැනීම
             const emailInput = document.getElementById('email-input').value.trim();
             const messageElement = document.getElementById('verification-message');
-            const loginButton = document.getElementById('login-button');
+            const successMessageDiv = document.getElementById('success-message');
             const verificationSection = document.getElementById('verification-section');
+            const loginButton = document.getElementById('login-button');
             const activeDot = document.getElementById('active-dot');
+            const logoutButton = document.getElementById('logout-button');
 
             if (emailInput === CORRECT_EMAIL) {
                 // Verification සාර්ථක වූ විට
                 
-                messageElement.style.color = 'green';
-                messageElement.textContent = "Verified! ඔබගේ ගිණුම දැන් Active යි.";
+                verificationSection.style.display = 'none';
+                messageElement.textContent = ''; 
+                
+                successMessageDiv.style.display = 'block';
+                successMessageDiv.textContent = "Verification Successful! ✅ WhatsApp message window is opening...";
+                
+                // *** නව කේතය: WhatsApp කවුළුව විවෘත කිරීම ***
+                const waUrl = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
+                window.open(waUrl, '_blank'); 
+                
+                // තත්පර 3 කට පසු, අනෙකුත් elements පෙන්වීමට/සැඟවීමට
+                setTimeout(() => {
+                    successMessageDiv.style.display = 'none'; 
 
-                // 1. Verification Section එක hide කරයි
-                verificationSection.style.display = 'none'; 
-                
-                // 2. Login Button එක hide කරයි (Back ආවොත් ඒක පේන්න තිබ්බත්, දැන් verification එක complete නිසා hide කරයි)
-                loginButton.style.display = 'none';
+                    loginButton.style.display = 'none'; 
+                    
+                    activeDot.classList.remove('logged-out-indicator');
+                    activeDot.title = "Account Active"; 
 
-                // 3. Green Active Dot එක පෙන්වීම සහ Blinking පටන් ගැනීම
-                activeDot.style.display = 'block';
-                activeDot.classList.add('blinking');
-                
-                // 4. Verification සම්පූර්ණ බව Save කිරීම
-                localStorage.setItem('verification_complete', 'true');
-                localStorage.removeItem('login_clicked');
-                
+                    activeDot.style.display = 'block';
+                    activeDot.classList.add('blinking');
+                    logoutButton.style.display = 'inline-block';
+                    
+                    // State Save කිරීම
+                    localStorage.setItem('verification_complete', 'true');
+                    localStorage.removeItem('login_clicked');
+
+                }, 3000); // 3000ms = තත්පර 3
 
             } else {
                 // Email එක වැරදි නම් පෙන්වන Message එක
@@ -214,7 +291,7 @@
                 messageElement.textContent = "Incorrect Email Address";
             }
         }
-        
+
         // Page එක Load වූ පසු තත්ත්වය පරීක්ෂා කිරීම (State Management)
         function checkLoginState() {
             const loginButtonClicked = localStorage.getItem('login_clicked');
@@ -222,31 +299,35 @@
             const loginButton = document.getElementById('login-button');
             const verificationSection = document.getElementById('verification-section');
             const activeDot = document.getElementById('active-dot');
+            const logoutButton = document.getElementById('logout-button');
 
             if (verificationComplete === 'true') {
-                // Verification සම්පූර්ණයි: Login/Verification hide කර Green Dot එක පෙන්වයි
+                // Verification සම්පූර්ණයි: Green Dot සහ Logout Button පෙන්වයි
                 loginButton.style.display = 'none';
                 verificationSection.style.display = 'none';
                 activeDot.style.display = 'block';
                 activeDot.classList.add('blinking');
+                logoutButton.style.display = 'inline-block';
+                activeDot.title = "Account Active";
                 
             } else if (loginButtonClicked === 'true') {
                 // Login Click කර Back ආවා: Verification Form එක පෙන්වයි
                 loginButton.style.display = 'none';
                 verificationSection.style.display = 'block';
                 activeDot.style.display = 'none';
+                logoutButton.style.display = 'none';
                 
             } else {
                 // සාමාන්‍ය තත්ත්වය: Login බොත්තම පමණක් පෙන්වයි
                 loginButton.style.display = 'inline-block';
                 verificationSection.style.display = 'none';
                 activeDot.style.display = 'none';
+                logoutButton.style.display = 'none';
             }
         }
 
         // Page එක Load වූ වහාම මෙම function එක ක්‍රියාත්මක වේ
         window.onload = checkLoginState;
     </script>
-
-</body>
+    </body>
 </html>
