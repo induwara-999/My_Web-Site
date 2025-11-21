@@ -1,0 +1,218 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f4f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Navigation Bar (Navbar) --- */
+.navbar {
+    background-color: #007bff; /* නිල් වර්ණය */
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+}
+
+.navbar a:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.navbar .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+/* --- Main Content Area --- */
+.content-section {
+    padding: 50px 20px;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+}
+
+/* --- Buttons for Home Page --- */
+.action-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-register {
+    background-color: #28a745; /* කොළ වර්ණය */
+    color: white;
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+}
+
+.btn-register:hover {
+    background-color: #1e7e34;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(40, 167, 69, 0.4);
+}
+
+.btn-signin {
+    background-color: #ffc107; /* කහ වර්ණය */
+    color: #333;
+    box-shadow: 0 4px 6px rgba(255, 193, 7, 0.3);
+}
+
+.btn-signin:hover {
+    background-color: #e0a800;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(255, 193, 7, 0.4);
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto; /* අන්තර්ගතය අවසානයේ තබා ගැනීමට */
+}
+
+/* --- Complex Attractive Animation (Moving Background Gradient) --- */
+/* මෙය බහු වර්ණ භාවිතයෙන් පාවෙන පසුබිමක් නිර්මාණය කරයි. */
+.home-hero {
+    overflow: hidden;
+    position: relative;
+    padding: 100px 20px;
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+.home-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        #007bff,   /* 1. නිල් (Blue) */
+        #ff69b4,   /* 2. රෝස (Pink) */
+        #28a745,   /* 3. කොළ (Green) */
+        #ffc107,   /* 4. කහ (Yellow) */
+        #fd7e14,   /* 5. තැඹිලි (Orange) */
+        #6f42c1,   /* 6. දම් (Purple) */
+        #007bff    /* නැවතත් නිල්, චක්‍රය සම්පූර්ණ කිරීමට */
+    );
+    background-size: 400% 400%; /* වර්ණ වැඩි බැවින් විශාලත්වය වැඩි කළා */
+    z-index: -1;
+    animation: vibrant-gradient-move 100s ease infinite; /* කාලය 100s දක්වා වැඩි කළා */
+}
+
+/* --- නව සජීවීකරණයේ ප්‍රධාන කොටස (වඩාත් විචිත්‍රවත් චලනය) --- */
+@keyframes vibrant-gradient-move {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 100% 0%;
+    }
+    50% {
+        background-position: 0% 100%;
+    }
+    75% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* අන්තර්ගතය ඉස්මතු කිරීමට */
+.home-hero > * {
+    position: relative;
+    z-index: 2;
+}
+
+.home-hero h1 {
+    font-size: 3em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.home-hero p {
+    font-size: 1.2em;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.low-level-text {
+    margin-top: 50px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+}
+
+/* --- Contact Page Styles --- */
+.contact-info {
+    list-style: none;
+    padding: 0;
+    font-size: 1.1em;
+}
+
+.contact-info li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.contact-info li strong {
+    display: inline-block;
+    width: 120px;
+    color: #007bff;
+}
+
+/* --- Policy Page Styles --- */
+.policy-section h3 {
+    color: #007bff;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-top: 30px;
+}
+
+.policy-section ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.policy-section p, .policy-section li {
+    line-height: 1.6;
+}
