@@ -187,8 +187,8 @@
         </div>
 
         <div class="verification-form" id="verification-section">
-            <p>Verification සඳහා ඔබගේ ඊමේල් ලිපිනය ඇතුළු කරන්න:</p>
-            <input type="email" id="email-input" placeholder="උදා: yourname@gmail.com" required>
+            <p>Enter Your Email Address For Verification:</p>
+            <input type="email" id="email-input" placeholder="e.g-: Tharushi@gmail.com" required>
             <button onclick="verifyEmail()">Verify</button>
             <div id="verification-message"></div>
         </div>
