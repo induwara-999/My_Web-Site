@@ -210,9 +210,13 @@
     <script>
         // අපේක්ෂිත නිවැරදි Email ලිපිනය
         const CORRECT_EMAIL = "b2kdiamondstore@gmail.com";
-        // WhatsApp අංකය සහ පණිවිඩය
+        // WhatsApp අංකය
         const WA_NUMBER = "94773608163"; 
-        const WA_MESSAGE = encodeURIComponent("Account Activation Successful✅✅"); // URL Encoding
+        
+        // Verification සාර්ථක වූ විට යවන පණිවිඩය
+        const WA_VERIFY_MESSAGE = encodeURIComponent("Account Activation Successful✅✅"); 
+        // *** Logout වූ විට යවන නව පණිවිඩය ***
+        const WA_LOGOUT_MESSAGE = encodeURIComponent("Account Deactivation Successful❎❎"); 
 
         // Login බොත්තම ක්ලික් කළ විට
         function handleLoginClick(event) {
@@ -223,7 +227,7 @@
             window.location.href = "https://tharustore.com"; 
         }
 
-        // Logout Button ක්ලික් කළ විට
+        // *** යාවත්කාලීන කළ Function එක: Logout Button ක්ලික් කළ විට ***
         function handleLogout() {
             const activeDot = document.getElementById('active-dot');
             const logoutButton = document.getElementById('logout-button');
@@ -233,6 +237,10 @@
             activeDot.classList.add('logged-out-indicator'); 
             activeDot.title = "Account Logged Out"; 
             logoutButton.style.display = 'none'; 
+            
+            // *** WhatsApp කවුළුව විවෘත කිරීම: Deactivation Message ***
+            const waUrlLogout = `https://wa.me/${WA_NUMBER}?text=${WA_LOGOUT_MESSAGE}`;
+            window.open(waUrlLogout, '_blank');
 
             // 2. තත්පර 0.2 කට පසු පිටුව නැවත Load කිරීම (Reset to initial state / Login page)
             setTimeout(() => {
@@ -260,11 +268,13 @@
                 messageElement.textContent = ''; 
                 
                 successMessageDiv.style.display = 'block';
-                successMessageDiv.textContent = "Verification Successful! ✅ WhatsApp message window is opening...";
                 
-                // *** නව කේතය: WhatsApp කවුළුව විවෘත කිරීම ***
-                const waUrl = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
-                window.open(waUrl, '_blank'); 
+                // .innerHTML යොදා <br> tag එක යෙදීම
+                successMessageDiv.innerHTML = "Verification Successful! ✅<br>WhatsApp message window is opening...";
+                
+                // WhatsApp කවුළුව විවෘත කිරීම (Activation Message) 
+                const waUrlVerify = `https://wa.me/${WA_NUMBER}?text=${WA_VERIFY_MESSAGE}`;
+                window.open(waUrlVerify, '_blank'); 
                 
                 // තත්පර 3 කට පසු, අනෙකුත් elements පෙන්වීමට/සැඟවීමට
                 setTimeout(() => {
