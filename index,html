@@ -4,7 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Your Website</title>
-    <link rel="stylesheet" href="assets/style.css">
+    
+    <style>
+        /* Login බොත්තම කොළ පාට කිරීමට අවශ්‍ය CSS */
+        .btn-signin {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .btn-signin:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Verification Form Styling */
+        .verification-form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            display: none; 
+        }
+
+        .verification-form input[type="email"] {
+            padding: 8px;
+            width: 70%;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .verification-form button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .verification-form button:hover {
+            background-color: #0056b3;
+        }
+
+        #verification-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Blink Animation */
+        /* වේගය 2s දක්වා අඩු කර ඇත */
+        @keyframes blink-animation {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        
+        /* Green Active Dot Styling (Hidden by default) */
+        .active-indicator {
+            height: 10px;
+            width: 10px;
+            background-color: #28a745; 
+            border-radius: 50%;
+            display: none; 
+            margin-left: 10px;
+            align-self: center;
+        }
+        
+        .blinking {
+            animation: blink-animation 2s infinite alternate; 
+        }
+
+        /* Navbar හි පෙළගැස්වීම සඳහා සරල විලාසයක් */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #333;
+            color: white;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .home-hero {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #f0f0f0;
+        }
+        .action-buttons {
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
@@ -17,15 +133,22 @@
             <a href="password_policy.html">Password Policy</a>
             <a href="contact.html">Contact Us</a>
         </div>
+        <div id="active-dot" class="active-indicator" title="Account Active"></div> 
     </nav>
 
     <div class="home-hero">
         <h1>Welcome to BetaCloudX</h1>
         <p>Enjoy The New Era Experience While Securing Your Data.</p>
 
-        <div class="action-buttons">
-            <a href="#" class="btn btn-register">Register Now</a>
-            <a href="#" class="btn btn-signin">Sign In</a>
+        <div class="action-buttons" id="action-buttons-container">
+            <a href="#" class="btn btn-signin" id="login-button" onclick="handleLoginClick(event)">Login</a> 
+        </div>
+
+        <div class="verification-form" id="verification-section">
+            <p>Verification සඳහා ඔබගේ ඊමේල් ලිපිනය ඇතුළු කරන්න:</p>
+            <input type="email" id="email-input" placeholder="උදා: yourname@gmail.com" required>
+            <button onclick="verifyEmail()">Verify</button>
+            <div id="verification-message"></div>
         </div>
 
         <p class="low-level-text">Created by INDUWARA</p>
@@ -39,6 +162,91 @@
     <footer class="footer">
         &copy; 2025 Your Website.All Rights Reserved.
     </footer>
+
+    <script>
+        // අපේක්ෂිත නිවැරදි Email ලිපිනය
+        const CORRECT_EMAIL = "b2kdiamondstore@gmail.com";
+
+        // Login බොත්තම ක්ලික් කළ විට
+        function handleLoginClick(event) {
+            event.preventDefault(); 
+            
+            // State එක Save කිරීම: "Login Button එක Click කළා"
+            localStorage.setItem('login_clicked', 'true');
+            
+            // අර site එකට redirect කිරීම
+            window.location.href = "https://tharustore.com"; 
+        }
+
+        // Verification Logic
+        function verifyEmail() {
+            // අවශ්‍ය සියලුම HTML Elements ලබා ගැනීම
+            const emailInput = document.getElementById('email-input').value.trim();
+            const messageElement = document.getElementById('verification-message');
+            const loginButton = document.getElementById('login-button');
+            const verificationSection = document.getElementById('verification-section');
+            const activeDot = document.getElementById('active-dot');
+
+            if (emailInput === CORRECT_EMAIL) {
+                // Verification සාර්ථක වූ විට
+                
+                messageElement.style.color = 'green';
+                messageElement.textContent = "Verified! ඔබගේ ගිණුම දැන් Active යි.";
+
+                // 1. Verification Section එක hide කරයි
+                verificationSection.style.display = 'none'; 
+                
+                // 2. Login Button එක hide කරයි (Back ආවොත් ඒක පේන්න තිබ්බත්, දැන් verification එක complete නිසා hide කරයි)
+                loginButton.style.display = 'none';
+
+                // 3. Green Active Dot එක පෙන්වීම සහ Blinking පටන් ගැනීම
+                activeDot.style.display = 'block';
+                activeDot.classList.add('blinking');
+                
+                // 4. Verification සම්පූර්ණ බව Save කිරීම
+                localStorage.setItem('verification_complete', 'true');
+                localStorage.removeItem('login_clicked');
+                
+
+            } else {
+                // Email එක වැරදි නම් පෙන්වන Message එක
+                messageElement.style.color = 'red';
+                messageElement.textContent = "Incorrect Email Address";
+            }
+        }
+        
+        // Page එක Load වූ පසු තත්ත්වය පරීක්ෂා කිරීම (State Management)
+        function checkLoginState() {
+            const loginButtonClicked = localStorage.getItem('login_clicked');
+            const verificationComplete = localStorage.getItem('verification_complete');
+            const loginButton = document.getElementById('login-button');
+            const verificationSection = document.getElementById('verification-section');
+            const activeDot = document.getElementById('active-dot');
+
+            if (verificationComplete === 'true') {
+                // Verification සම්පූර්ණයි: Login/Verification hide කර Green Dot එක පෙන්වයි
+                loginButton.style.display = 'none';
+                verificationSection.style.display = 'none';
+                activeDot.style.display = 'block';
+                activeDot.classList.add('blinking');
+                
+            } else if (loginButtonClicked === 'true') {
+                // Login Click කර Back ආවා: Verification Form එක පෙන්වයි
+                loginButton.style.display = 'none';
+                verificationSection.style.display = 'block';
+                activeDot.style.display = 'none';
+                
+            } else {
+                // සාමාන්‍ය තත්ත්වය: Login බොත්තම පමණක් පෙන්වයි
+                loginButton.style.display = 'inline-block';
+                verificationSection.style.display = 'none';
+                activeDot.style.display = 'none';
+            }
+        }
+
+        // Page එක Load වූ වහාම මෙම function එක ක්‍රියාත්මක වේ
+        window.onload = checkLoginState;
+    </script>
 
 </body>
 </html>
