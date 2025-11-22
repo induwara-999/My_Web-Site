@@ -1,5 +1,5 @@
 // අපේක්ෂිත නිවැරදි Email ලිපිනය
-const CORRECT_EMAIL = "b2kdiamondstore@gmail.com";
+const CORRECT_EMAIL = "b5kdiamondstore@gmail.com";
 
 // Login බොත්තම ක්ලික් කළ විට
 function handleLoginClick(event) {
